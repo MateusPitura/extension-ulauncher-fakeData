@@ -55,7 +55,7 @@ class KeywordQueryEventListener(EventListener):
 
             # Order by last_used from DB (most recent first); unknown ones go to the end, then by name
             usage_order = {n: idx for idx, n in enumerate(
-                extension.repository.get_items(extension))}
+                extension.repository.get_items())}
 
             items.sort(
                 key=lambda pair: (usage_order.get(
