@@ -1,25 +1,19 @@
 {
     "required_api_version": "^2.0.0",
-    "name": "Brazilian Data Generator",
-    "description": "Generates a wide range of valid Brazilian data, including CPF, CNPJ, RG, names, addresses, postal codes, phone numbers, birth dates, and email addresses, all ready to be copied to the clipboard",
-    "developer_name": "Kleber de Souza",
-    "icon": "images/doc.png",
+    "name": "Fake Data",
+    "description": "Generates a wide range of valid fake data",
+    "developer_name": "Mateus Pitura",
+    "icon": "images/logo.png",
     "options": {
-        "query_debounce": 0.05
+        "query_debounce": 0.2
     },
     "preferences": [
         {
             "id": "keyword",
             "type": "keyword",
             "name": "Keyword",
-            "default_value": "fakerbr"
-        },
-        {
-            "id": "stay_open",
-            "type": "select",
-            "name": "Keep Ulauncher open after copying",
-            "default_value": "no",
-            "options": ["yes", "no"]
+            "default_value": "fd",
+            "description": ""
         }
     ]
 }
