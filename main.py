@@ -29,10 +29,11 @@ class FakaDataExtension(Extension):
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         query = (event.get_argument() or "").lower().strip()
-        items = []
 
         if query == "":
-            extension.fakeData = {
+            aux_items = []
+
+            fake_data = {
                 "Address": generate_address(),
                 "BirthDate": generate_birth_date(),
                 "CNPJ": generate_cnpj(),
@@ -44,28 +45,29 @@ class KeywordQueryEventListener(EventListener):
                 "RG": generate_rg()
             }
 
-            for key, value in extension.fakeData.items():
+            for key, value in fake_data.items():
                 item = ExtensionSmallResultItem(
                     icon='images/logo.png',
                     name=f"{key}: {value}",
                     on_enter=CopyToClipboardAction(value)
                 )
 
-                items.append((key, item))
+                aux_items.append((key, item))
 
             # Order by last_used from DB (most recent first); unknown ones go to the end, then by name
-            usage_order = {n: idx for idx, n in enumerate(
-                extension.repository.get_items())}
+            usage_order = {
+                n: idx
+                for idx, n in enumerate(extension.repository.get_items())}
 
-            items.sort(
+            aux_items.sort(
                 key=lambda pair: (usage_order.get(
                     pair[0], float('inf')), pair[0].lower())
             )
 
             # Drop names, keep only items
-            ordered_items = [item for _, item in items]
+            items = [item for _, item in aux_items]
 
-            items.extend(ordered_items)
+            extension.fake_items = items
 
             return RenderResultListAction(items)
 
@@ -75,7 +77,7 @@ class KeywordQueryEventListener(EventListener):
                 name=f"{key}: {value}",
                 on_enter=CopyToClipboardAction(value)
             )
-            for key, value in extension.fakeData.items()
+            for key, value in extension.fake_items.items()
             if query in key.lower()
         ]
         return RenderResultListAction(filtered_items)
