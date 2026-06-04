@@ -50,11 +50,16 @@ class KeywordQueryEventListener(EventListener):
 
             return RenderResultListAction(items)
 
-        return {
-            k: v
-            for k, v in extension.fakeData.items()
-            if query in k.lower()
-        }
+        filtered_items = [
+            ExtensionSmallResultItem(
+                icon='images/logo.png',
+                name=f"{key}: {value}",
+                on_enter=CopyToClipboardAction(value)
+            )
+            for key, value in extension.fakeData.items()
+            if query in key.lower()
+        ]
+        return RenderResultListAction(filtered_items)
 
 
 if __name__ == '__main__':
