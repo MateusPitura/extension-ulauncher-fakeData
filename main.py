@@ -72,12 +72,8 @@ class KeywordQueryEventListener(EventListener):
             return RenderResultListAction(items)
 
         filtered_items = [
-            ExtensionSmallResultItem(
-                icon='images/logo.png',
-                name=f"{key}: {value}",
-                on_enter=CopyToClipboardAction(value)
-            )
-            for key, value in extension.fake_items.items()
+            item
+            for key, item in extension.fake_items
             if query in key.lower()
         ]
         return RenderResultListAction(filtered_items)
