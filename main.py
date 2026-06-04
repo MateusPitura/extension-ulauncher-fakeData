@@ -54,7 +54,7 @@ class KeywordQueryEventListener(EventListener):
 
                 aux_items.append((key, item))
 
-            # Order by last_used from DB (most recent first); unknown ones go to the end, then by name
+            # Order by last_used from DB; unknown ones go to the end, then by name
             usage_order = {
                 n: idx
                 for idx, n in enumerate(extension.repository.get_items())}
@@ -64,10 +64,10 @@ class KeywordQueryEventListener(EventListener):
                     pair[0], float('inf')), pair[0].lower())
             )
 
+            extension.fake_items = aux_items
+
             # Drop names, keep only items
             items = [item for _, item in aux_items]
-
-            extension.fake_items = items
 
             return RenderResultListAction(items)
 
