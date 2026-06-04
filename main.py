@@ -45,13 +45,13 @@ class KeywordQueryEventListener(EventListener):
             }
 
             for key, value in extension.fakeData.items():
-                items.append(
-                    ExtensionSmallResultItem(
-                        icon='images/logo.png',
-                        name=f"{key}: {value}",
-                        on_enter=CopyToClipboardAction(value)
-                    )
+                item = ExtensionSmallResultItem(
+                    icon='images/logo.png',
+                    name=f"{key}: {value}",
+                    on_enter=CopyToClipboardAction(value)
                 )
+
+                items.append((key, item))
 
             # Order by last_used from DB (most recent first); unknown ones go to the end, then by name
             usage_order = {n: idx for idx, n in enumerate(
