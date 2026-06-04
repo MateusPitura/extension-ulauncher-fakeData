@@ -1,9 +1,10 @@
 import random
 from fakeData.municipalities import municipalities
+from fakeData.streets import streets
 
 
-def generate_address(self) -> str:
-    street = random.choice(self.streets)
+def generate_address():
+    street = random.choice(streets)
     number = random.randint(1, 2000)
     complement = random.choice(
         [f"Apt {random.randint(1, 500)}", "", "House"])

@@ -1,5 +1,5 @@
 import random
-from generators.generate_names import generate_name
+from generators.generate_name import generate_name
 
 def generate_email() -> str:
     name = generate_name()
