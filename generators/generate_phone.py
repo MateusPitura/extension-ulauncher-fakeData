@@ -1,5 +1,5 @@
 import random
-from utils.generate_random_number import generate_random_number
+from src.utils.generate_random_number import generate_random_number
 
 
 def generate_phone(with_ddd=True) -> str:

@@ -1,4 +1,4 @@
-from utils.generate_random_number import generate_random_number
+from src.utils.generate_random_number import generate_random_number
 
 
 def generate_postal_code(with_dash=True) -> str:

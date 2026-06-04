@@ -1,5 +1,5 @@
-from utils.calculate_digit import calculate_digit
-from utils.generate_random_number import generate_random_number
+from src.utils.calculate_digit import calculate_digit
+from src.utils.generate_random_number import generate_random_number
 
 
 def generate_cnpj(formatted=True) -> str:

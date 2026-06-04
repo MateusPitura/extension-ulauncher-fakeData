@@ -1,4 +1,4 @@
-from utils.generate_random_number import generate_random_number
+from src.utils.generate_random_number import generate_random_number
 
 def generate_rg(formatted=False) -> str:
     rg = generate_random_number(9)

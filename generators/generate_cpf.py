@@ -1,5 +1,5 @@
-from utils.generate_random_number import generate_random_number
-from utils.calculate_digit import calculate_digit
+from src.utils.generate_random_number import generate_random_number
+from src.utils.calculate_digit import calculate_digit
 
 
 def generate_cpf(formatted=True) -> str:

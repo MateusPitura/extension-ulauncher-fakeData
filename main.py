@@ -1,3 +1,4 @@
+import os
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.event import KeywordQueryEvent
@@ -13,12 +14,16 @@ from generators.generate_name import generate_name
 from generators.generate_phone import generate_phone
 from generators.generate_postal_code import generate_postal_code
 from generators.generate_rg import generate_rg
+from src.repository.GeneratorRepository import GeneratorRepository
 
 
 class FakaDataExtension(Extension):
     def __init__(self):
         super(FakaDataExtension, self).__init__()
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
+
+        self.repository = GeneratorRepository(
+            dirname=os.path.dirname(__file__))
 
 
 class KeywordQueryEventListener(EventListener):
@@ -47,6 +52,20 @@ class KeywordQueryEventListener(EventListener):
                         on_enter=CopyToClipboardAction(value)
                     )
                 )
+
+            # Order by last_used from DB (most recent first); unknown ones go to the end, then by name
+            usage_order = {n: idx for idx, n in enumerate(
+                extension.repository.get_items(extension))}
+
+            items.sort(
+                key=lambda pair: (usage_order.get(
+                    pair[0], float('inf')), pair[0].lower())
+            )
+
+            # Drop names, keep only items
+            ordered_items = [item for _, item in items]
+
+            items.extend(ordered_items)
 
             return RenderResultListAction(items)
 
