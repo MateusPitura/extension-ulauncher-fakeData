@@ -55,7 +55,7 @@ class KeywordQueryEventListener(EventListener):
                     on_enter=ExtensionCustomAction(
                         {
                             "action": "update_last_used",
-                            "value": value,
+                            "value": key,
                         },
                         keep_app_open=False
                     ),
