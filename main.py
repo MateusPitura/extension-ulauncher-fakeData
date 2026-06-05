@@ -7,15 +7,16 @@ from ulauncher.api.shared.item.ExtensionSmallResultItem import ExtensionSmallRes
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAction
 from ulauncher.api.shared.event import ItemEnterEvent
-from generators.generate_address import generate_address
-from generators.generate_birth_date import generate_birth_date
-from generators.generate_cnpj import generate_cnpj
-from generators.generate_cpf import generate_cpf
-from generators.generate_email import generate_email
-from generators.generate_name import generate_name
-from generators.generate_phone import generate_phone
-from generators.generate_postal_code import generate_postal_code
-from generators.generate_rg import generate_rg
+from src.generators.generate_address import generate_address
+from src.generators.generate_birth_date import generate_birth_date
+from src.generators.generate_cnpj import generate_cnpj
+from src.generators.generate_cpf import generate_cpf
+from src.generators.generate_email import generate_email
+from src.generators.generate_name import generate_name
+from src.generators.generate_phone import generate_phone
+from src.generators.generate_postal_code import generate_postal_code
+from src.generators.generate_rg import generate_rg
+from src.utils.generate_random_number import generate_random_number
 from src.repository.GeneratorRepository import GeneratorRepository
 
 
@@ -47,6 +48,16 @@ class KeywordQueryEventListener(EventListener):
                 "CEP": generate_postal_code(),
                 "RG": generate_rg()
             }
+
+            custom_emails_raw = extension.preferences.get('custom_email_raw', '')
+            custom_emails = custom_emails_raw.split(';')
+
+            for custom_email in custom_emails:
+                if '=' not in custom_email:
+                    continue
+                name, email = map(str.strip, custom_email.split('=', 1))
+
+                fake_data[f'Email {name}'] = email.replace('{random}', generate_random_number(5))
 
             for key, value in fake_data.items():
                 item = ExtensionSmallResultItem(
