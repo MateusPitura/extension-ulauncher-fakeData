@@ -14,7 +14,7 @@ class GeneratorRepository:
 
         self.cursor.execute("""
         CREATE TABLE IF NOT EXISTS generators (
-            name TEXT,
+            name TEXT PRIMARY KEY,
             last_used INTEGER
         )
         """)
