@@ -6,6 +6,7 @@ from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionSmallResultItem import ExtensionSmallResultItem
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAction
+from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 from ulauncher.api.shared.event import ItemEnterEvent
 from src.generators.generate_address import generate_address
 from src.generators.generate_birth_date import generate_birth_date
@@ -14,7 +15,6 @@ from src.generators.generate_cpf import generate_cpf
 from src.generators.generate_email import generate_email
 from src.generators.generate_name import generate_name
 from src.generators.generate_phone import generate_phone
-from src.generators.generate_postal_code import generate_postal_code
 from src.generators.generate_rg import generate_rg
 from src.utils.generate_random_number import generate_random_number
 from src.repository.GeneratorRepository import GeneratorRepository
@@ -45,7 +45,6 @@ class KeywordQueryEventListener(EventListener):
                 "Email": generate_email(),
                 "Name": generate_name(),
                 "Phone": generate_phone(),
-                "CEP": generate_postal_code(),
                 "RG": generate_rg()
             }
 
@@ -77,7 +76,6 @@ class KeywordQueryEventListener(EventListener):
                 aux_items.append((key, item))
 
             if extension.address is None:
-                print(f"🌠 generate address")
                 extension.address = generate_address()
 
             aux_items.append(("Address", ExtensionSmallResultItem(
@@ -86,6 +84,7 @@ class KeywordQueryEventListener(EventListener):
                 on_enter=ExtensionCustomAction(
                     {
                         "action": "display_address_fields",
+                        "address_string": extension.address[0],
                         "fields": extension.address[1]
                     },
                     keep_app_open=True
@@ -131,25 +130,38 @@ class CustomActionListener(EventListener):
                            input=value.encode(), check=False)
 
         if data.get("action") == "display_address_fields":
+            address_string = data["address_string"]
             fields = data["fields"]
+
+            subprocess.run(["xclip", "-selection", "clipboard"],
+                           input=address_string.encode(), check=False)
 
             items = [
                 ExtensionSmallResultItem(
                     icon='images/logo.png',
                     name=f"{key}: {value}",
-                    on_enter=ExtensionCustomAction(
-                        {
-                            "action": "update_last_used",
-                            "key": key,
-                            "value": value
-                        },
-                        keep_app_open=False
-                    ),
+                    on_enter=CopyToClipboardAction(value),
                 )
                 for key, value in fields.items()
             ]
 
+            items.insert(
+                ExtensionSmallResultItem(
+                    icon='images/reset.png',
+                    name="Generate new address",
+                    on_enter=ExtensionCustomAction(
+                        {
+                            "action": "generate_new_address",
+                        },
+                        keep_app_open=False
+                    ),
+                )
+            )
+
             return RenderResultListAction(items)
+
+        if data.get("action") == "generate_new_address":
+            extension.address = generate_address()
 
 
 if __name__ == '__main__':
