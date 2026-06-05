@@ -85,7 +85,8 @@ class KeywordQueryEventListener(EventListener):
                     {
                         "action": "display_address_fields",
                         "address_string": extension.address[0],
-                        "fields": extension.address[1]
+                        "fields": extension.address[1],
+                        "generate_new_address": False
                     },
                     keep_app_open=True
                 ),
@@ -130,8 +131,15 @@ class CustomActionListener(EventListener):
                            input=value.encode(), check=False)
 
         if data.get("action") == "display_address_fields":
-            address_string = data["address_string"]
-            fields = data["fields"]
+            generate_new_addres = data["generate_new_address"]
+
+            if generate_new_addres:
+                extension.address = generate_address()
+                address_string = extension.address[0]
+                fields = extension.address[1]
+            else:
+                address_string = data["address_string"]
+                fields = data["fields"]
 
             subprocess.run(["xclip", "-selection", "clipboard"],
                            input=address_string.encode(), check=False)
@@ -152,17 +160,15 @@ class CustomActionListener(EventListener):
                     name="Generate new address",
                     on_enter=ExtensionCustomAction(
                         {
-                            "action": "generate_new_address",
+                            "action": "display_address_fieldss",
+                            "generate_new_address": True
                         },
-                        keep_app_open=False
+                        keep_app_open=True
                     ),
                 )
             )
 
             return RenderResultListAction(items)
-
-        if data.get("action") == "generate_new_address":
-            extension.address = generate_address()
 
 
 if __name__ == '__main__':
