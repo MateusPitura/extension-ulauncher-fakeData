@@ -1,10 +1,12 @@
 import os
+import subprocess
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionSmallResultItem import ExtensionSmallResultItem
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
-from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
+from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAction
+from ulauncher.api.shared.event import ItemEnterEvent
 from generators.generate_address import generate_address
 from generators.generate_birth_date import generate_birth_date
 from generators.generate_cnpj import generate_cnpj
@@ -21,6 +23,7 @@ class FakaDataExtension(Extension):
     def __init__(self):
         super(FakaDataExtension, self).__init__()
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
+        self.subscribe(ItemEnterEvent, CustomActionListener())
 
         self.repository = GeneratorRepository(
             dirname=os.path.dirname(__file__))
@@ -49,7 +52,13 @@ class KeywordQueryEventListener(EventListener):
                 item = ExtensionSmallResultItem(
                     icon='images/logo.png',
                     name=f"{key}: {value}",
-                    on_enter=CopyToClipboardAction(value)
+                    on_enter=ExtensionCustomAction(
+                        {
+                            "action": "update_last_used",
+                            "value": value,
+                        },
+                        keep_app_open=False
+                    ),
                 )
 
                 aux_items.append((key, item))
@@ -77,6 +86,21 @@ class KeywordQueryEventListener(EventListener):
             if query in key.lower()
         ]
         return RenderResultListAction(filtered_items)
+
+
+class CustomActionListener(EventListener):
+    def on_event(self, event, extension):
+        data = event.get_data()
+
+        if data.get("action") != "update_last_used":
+            return
+
+        value = data["value"]
+
+        extension.repository.mark_used(value)
+
+        subprocess.run(["xclip", "-selection", "clipboard"],
+                       input=value, check=False)
 
 
 if __name__ == '__main__':
