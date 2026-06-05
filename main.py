@@ -38,7 +38,6 @@ class KeywordQueryEventListener(EventListener):
             aux_items = []
 
             fake_data = {
-                "Address": generate_address(),
                 "BirthDate": generate_birth_date(),
                 "CNPJ": generate_cnpj(),
                 "CPF": generate_cpf(),
@@ -57,7 +56,8 @@ class KeywordQueryEventListener(EventListener):
                     continue
                 name, email = map(str.strip, custom_email.split('=', 1))
 
-                fake_data[f'Email {name}'] = email.replace('{random}', generate_random_number(5))
+                fake_data[f'Email {name}'] = email.replace(
+                    '{random}', generate_random_number(5))
 
             for key, value in fake_data.items():
                 item = ExtensionSmallResultItem(
@@ -74,6 +74,21 @@ class KeywordQueryEventListener(EventListener):
                 )
 
                 aux_items.append((key, item))
+
+            if extension.address is None:
+                extension.address = generate_address()
+
+            aux_items.append(("Address", ExtensionSmallResultItem(
+                icon='images/logo.png',
+                name=f"Address: {extension.address[0]}",
+                on_enter=ExtensionCustomAction(
+                    {
+                        "action": "display_address_fields",
+                        "fields": extension.address[1]
+                    },
+                    keep_app_open=True
+                ),
+            )))
 
             # Order by last_used from DB; unknown ones go to the end, then by name
             usage_order = {
@@ -104,16 +119,27 @@ class CustomActionListener(EventListener):
     def on_event(self, event, extension):
         data = event.get_data()
 
-        if data.get("action") != "update_last_used":
-            return
+        if data.get("action") == "update_last_used":
+            key = data["key"]
+            value = data["value"]
 
-        key = data["key"]
-        value = data["value"]
+            extension.repository.mark_as_used(key)
 
-        extension.repository.mark_as_used(key)
+            subprocess.run(["xclip", "-selection", "clipboard"],
+                           input=value.encode(), check=False)
 
-        subprocess.run(["xclip", "-selection", "clipboard"],
-                       input=value.encode(), check=False)
+        if data.get("action") == "display_address_fields":
+            fields = data["fields"]
+
+            items = [
+                ExtensionSmallResultItem(
+                    icon='images/logo.png',
+                    name=f"{field.capitalize()}: {value}"
+                )
+                for field, value in fields.items()
+            ]
+
+            return RenderResultListAction(items)
 
 
 if __name__ == '__main__':

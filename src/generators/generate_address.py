@@ -1,18 +1,10 @@
 import random
-from src.fakeData.municipalities import municipalities
-from src.fakeData.streets import streets
+from src.fakeData.address import address
 
 
 def generate_address():
-    street = random.choice(streets)
-    number = random.randint(1, 2000)
-    complement = random.choice(
-        [f"Apt {random.randint(1, 500)}", "", "House"])
+    full_address = random.choice(address)
 
-    state = random.choice(list(municipalities.keys()))
-    city = random.choice(municipalities[state])
-    address = f"{street}, {number}"
-    if complement:
-        address += f", {complement}"
-    address += f" - {city}/{state}"
-    return address
+    address_string = f"{full_address['logradouro']}, {full_address['numero']} - {full_address['bairro']}, {full_address['localidade']} - {full_address['uf']}, {full_address['cep']}"
+
+    return (address_string, full_address)
