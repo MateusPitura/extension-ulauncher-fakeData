@@ -1,6 +1,6 @@
 import random
-from fakeData.municipalities import municipalities
-from fakeData.streets import streets
+from src.fakeData.municipalities import municipalities
+from src.fakeData.streets import streets
 
 
 def generate_address():

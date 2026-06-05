@@ -1,6 +1,6 @@
 import random
-from fakeData.first_names import first_names
-from fakeData.last_names import last_names
+from src.fakeData.first_names import first_names
+from src.fakeData.last_names import last_names
 
 
 def generate_name():
