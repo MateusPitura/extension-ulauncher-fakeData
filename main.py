@@ -136,9 +136,17 @@ class CustomActionListener(EventListener):
             items = [
                 ExtensionSmallResultItem(
                     icon='images/logo.png',
-                    name=f"{field.capitalize()}: {value}"
+                    name=f"{key}: {value}",
+                    on_enter=ExtensionCustomAction(
+                        {
+                            "action": "update_last_used",
+                            "key": key,
+                            "value": value
+                        },
+                        keep_app_open=False
+                    ),
                 )
-                for field, value in fields.items()
+                for key, value in fields.items()
             ]
 
             return RenderResultListAction(items)

@@ -14,19 +14,6 @@ CEPS = [
     "74015-070",
 ]
 
-FIELDS_TO_KEEP = [
-    "cep",
-    "logradouro",
-    "complemento",
-    "bairro",
-    "localidade",
-    "uf",
-    "estado",
-    "regiao",
-    "ibge",
-    "ddd",
-]
-
 addresses = []
 
 for cep in CEPS:
@@ -42,10 +29,19 @@ for cep in CEPS:
         print(f"CEP not found: {cep}")
         continue
 
-    address = {field: data.get(field, "") for field in FIELDS_TO_KEEP}
-
-    # Add custom field
-    address["numero"] = generate_random_number(4)
+    address = {
+        "CEP": data.get("cep", ""),
+        "Street": data.get("logradouro", ""),
+        "Number": generate_random_number(4),
+        "Complement": data.get("complemento", ""),
+        "Neighborhood": data.get("bairro", ""),
+        "City": data.get("localidade", ""),
+        "UF": data.get("uf", ""),
+        "State": data.get("estado", ""),
+        "Region": data.get("regiao", ""),
+        "IBGE Code": data.get("ibge", ""),
+        "DDD": data.get("ddd", ""),
+    }
 
     addresses.append(address)
 
