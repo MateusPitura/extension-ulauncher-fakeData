@@ -75,7 +75,8 @@ class KeywordQueryEventListener(EventListener):
 
                 aux_items.append((key, item))
 
-            if extension.address is None:
+            if 'address' in extension:
+                print(f"🌠 generate address")
                 extension.address = generate_address()
 
             aux_items.append(("Address", ExtensionSmallResultItem(
