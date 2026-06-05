@@ -160,7 +160,7 @@ class CustomActionListener(EventListener):
                     name="Generate new address",
                     on_enter=ExtensionCustomAction(
                         {
-                            "action": "display_address_fieldss",
+                            "action": "display_address_fields",
                             "generate_new_address": True
                         },
                         keep_app_open=True
