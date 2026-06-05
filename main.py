@@ -49,7 +49,7 @@ class KeywordQueryEventListener(EventListener):
                 "RG": generate_rg()
             }
 
-            custom_emails_raw = extension.preferences.get('custom_email_raw', '')
+            custom_emails_raw = extension.preferences.get('custom_emails', '')
             print(f"🌠 custom_emails_raw: {custom_emails_raw}")
             custom_emails = custom_emails_raw.split(';')
             print(f"🌠 custom_emails: {custom_emails}")
