@@ -28,6 +28,7 @@ class FakaDataExtension(Extension):
 
         self.repository = GeneratorRepository(
             dirname=os.path.dirname(__file__))
+        self.address = None
 
 
 class KeywordQueryEventListener(EventListener):
@@ -75,7 +76,7 @@ class KeywordQueryEventListener(EventListener):
 
                 aux_items.append((key, item))
 
-            if 'address' in extension:
+            if extension.address is None:
                 print(f"🌠 generate address")
                 extension.address = generate_address()
 
