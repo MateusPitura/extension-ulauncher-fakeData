@@ -100,7 +100,7 @@ class CustomActionListener(EventListener):
         extension.repository.mark_as_used(value)
 
         subprocess.run(["xclip", "-selection", "clipboard"],
-                       input=value, check=False)
+                       input=value.encode(), check=False)
 
 
 if __name__ == '__main__':
