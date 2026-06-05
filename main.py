@@ -50,21 +50,15 @@ class KeywordQueryEventListener(EventListener):
             }
 
             custom_emails_raw = extension.preferences.get('custom_emails', '')
-            print(f"🌠 custom_emails_raw: {custom_emails_raw}")
             custom_emails = custom_emails_raw.split(';')
-            print(f"🌠 custom_emails: {custom_emails}")
 
             for custom_email in custom_emails:
-                print(f"🌠 custom_email: {custom_email}")
                 if '=' not in custom_email:
                     continue
                 name, email = map(str.strip, custom_email.split('=', 1))
-                print(f"🌠 email: {email}")
-                print(f"🌠 name: {name}")
 
                 fake_data[f'Email {name}'] = email.replace('{random}', generate_random_number(5))
 
-            print(f"🌠 fake_data: {fake_data}")
             for key, value in fake_data.items():
                 item = ExtensionSmallResultItem(
                     icon='images/logo.png',
@@ -72,7 +66,8 @@ class KeywordQueryEventListener(EventListener):
                     on_enter=ExtensionCustomAction(
                         {
                             "action": "update_last_used",
-                            "value": key,
+                            "key": key,
+                            "value": value
                         },
                         keep_app_open=False
                     ),
@@ -112,9 +107,10 @@ class CustomActionListener(EventListener):
         if data.get("action") != "update_last_used":
             return
 
+        key = data["key"]
         value = data["value"]
 
-        extension.repository.mark_as_used(value)
+        extension.repository.mark_as_used(key)
 
         subprocess.run(["xclip", "-selection", "clipboard"],
                        input=value.encode(), check=False)
