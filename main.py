@@ -146,6 +146,7 @@ class CustomActionListener(EventListener):
             ]
 
             items.insert(
+                0,
                 ExtensionSmallResultItem(
                     icon='images/reset.png',
                     name="Generate new address",
