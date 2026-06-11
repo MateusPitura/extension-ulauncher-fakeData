@@ -17,6 +17,7 @@ from src.generators.generate_email import generate_email
 from src.generators.generate_name import generate_name
 from src.generators.generate_phone import generate_phone
 from src.generators.generate_rg import generate_rg
+from src.generators.generate_lorem import generate_lorem
 from src.utils.generate_random_number import generate_random_number
 from src.repository.GeneratorRepository import GeneratorRepository
 
@@ -51,7 +52,8 @@ class KeywordQueryEventListener(EventListener):
                 "Email": generate_email(),
                 "Name": generate_name(),
                 "Phone": generate_phone(),
-                "RG": generate_rg()
+                "RG": generate_rg(),
+                "Lorem": generate_lorem(10)
             }
 
             custom_emails_raw = extension.preferences.get('custom_emails', '')
