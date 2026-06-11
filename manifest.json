@@ -21,6 +21,26 @@
             "name": "Emails",
             "description": "key=value records separated by semicolon (;): <key1>=<value1>;<key2>=<value2>",
             "default_value": "Personal=youremail+{random}@gmail.com"
+        },
+        {
+            "id": "format_with_mask",
+            "type": "select",
+            "name": "Format values with mask",
+            "default_value": "true",
+            "options": [
+                { "value": "true", "text": "True" },
+                { "value": "false", "text": "False" }
+            ]
+        },
+        {
+            "id": "date_format",
+            "type": "select",
+            "name": "Date format",
+            "default_value": "dd/MM/yyyy",
+            "options": [
+                { "value": "dd/MM/yyyy", "text": "dd/MM/yyyy" },
+                { "value": "YYYY-MM-DD", "text": "YYYY-MM-DD" }
+            ]
         }
     ]
 }

@@ -50,15 +50,19 @@ def handle_keyword_query(event, extension):
     if query == "":
         aux_items = []
 
+        should_format_with_mask = extension.preferences.get(
+            'format_with_mask', '') == 'true'
+        date_format = extension.preferences.get('date_format', 'dd/mm/yyyy')
+
         fake_data = {
-            "Date": generate_date(),
-            "CNPJ": generate_cnpj(),
-            "CPF": generate_cpf(),
+            "Date": generate_date(date_format=date_format),
+            "CNPJ": generate_cnpj(formatted=should_format_with_mask),
+            "CPF": generate_cpf(formatted=should_format_with_mask),
             "Email": generate_email(),
             "Name": generate_name(),
-            "CellPhone": generate_mobile_phone(),
-            "Phone": generate_home_phone(),
-            "RG": generate_rg(),
+            "CellPhone": generate_mobile_phone(formatted=should_format_with_mask),
+            "Phone": generate_home_phone(formatted=should_format_with_mask),
+            "RG": generate_rg(formatted=should_format_with_mask),
             "Lorem": generate_lorem(10),
             "Company": generate_company(),
             "Color": generate_color(),
@@ -93,10 +97,12 @@ def handle_keyword_query(event, extension):
             aux_items.append((key, item, value))
 
         if extension.address is None:
-            extension.address = generate_address()
+            extension.address = generate_address(
+                formatted=should_format_with_mask)
 
         if extension.credit_card is None:
-            extension.credit_card = generate_credit_card()
+            extension.credit_card = generate_credit_card(
+                formatted=should_format_with_mask)
 
         aux_items.append((
             ADDRESS_KEY,
@@ -171,8 +177,8 @@ def handle_keyword_query(event, extension):
             return RenderResultListAction([new_item])
 
     if query in ("date p", "date f"):
-        new_date = generate_date(
-            only_past=True) if query == "date p" else generate_date(only_future=True)
+        new_date = generate_date(only_past=True, date_format=date_format) if query == "date p" else generate_date(
+            only_future=True, date_format=date_format)
         new_item = ExtensionSmallResultItem(
             icon='images/logo.png',
             name=f'Date: {new_date}',
@@ -235,6 +241,8 @@ class KeywordQueryEventListener(EventListener):
 class CustomActionListener(EventListener):
     def on_event(self, event, extension):
         data = event.get_data()
+        should_format_with_mask = extension.preferences.get(
+            'format_with_mask', '') == 'true'
 
         if data.get("action") == "update_last_used":
             key = data["key"]
@@ -249,7 +257,9 @@ class CustomActionListener(EventListener):
             generate_new = data["generate_new_address"]
 
             if generate_new:
-                extension.address = generate_address()
+                extension.address = generate_address(
+                    formatted=should_format_with_mask
+                )
                 address_string = extension.address[0]
                 fields = extension.address[1]
             else:
@@ -290,7 +300,9 @@ class CustomActionListener(EventListener):
             generate_new = data["generate_new_credit_card"]
 
             if generate_new:
-                extension.credit_card = generate_credit_card()
+                extension.credit_card = generate_credit_card(
+                    formatted=should_format_with_mask
+                )
                 credit_card_string = extension.credit_card[0]
                 fields = extension.credit_card[1]
             else:
