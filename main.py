@@ -1,5 +1,6 @@
 import os
 import subprocess
+import re
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.event import KeywordQueryEvent
@@ -81,7 +82,7 @@ class KeywordQueryEventListener(EventListener):
                     ),
                 )
 
-                aux_items.append((key, item))
+                aux_items.append((key, item, value))
 
             if extension.address is None:
                 extension.address = generate_address()
@@ -89,33 +90,41 @@ class KeywordQueryEventListener(EventListener):
             if extension.credit_card is None:
                 extension.credit_card = generate_credit_card()
 
-            aux_items.append((ADDRESS_KEY, ExtensionSmallResultItem(
-                icon='images/logo.png',
-                name=f"{ADDRESS_KEY}: {extension.address[0]}",
-                on_enter=ExtensionCustomAction(
-                    {
-                        "action": "display_address_fields",
-                        "address_string": extension.address[0],
-                        "fields": extension.address[1],
-                        "generate_new_address": False
-                    },
-                    keep_app_open=True
+            aux_items.append((
+                ADDRESS_KEY,
+                ExtensionSmallResultItem(
+                    icon='images/logo.png',
+                    name=f"{ADDRESS_KEY}: {extension.address[0]}",
+                    on_enter=ExtensionCustomAction(
+                        {
+                            "action": "display_address_fields",
+                            "address_string": extension.address[0],
+                            "fields": extension.address[1],
+                            "generate_new_address": False
+                        },
+                        keep_app_open=True
+                    ),
                 ),
-            )))
+                extension.address[0]
+            ))
 
-            aux_items.append((CREDIT_CARD_KEY, ExtensionSmallResultItem(
-                icon='images/logo.png',
-                name=f"{CREDIT_CARD_KEY}: {extension.credit_card[0]}",
-                on_enter=ExtensionCustomAction(
-                    {
-                        "action": "display_credit_card_fields",
-                        "credit_card_string": extension.credit_card[0],
-                        "fields": extension.credit_card[1],
-                        "generate_new_credit_card": False
-                    },
-                    keep_app_open=True
+            aux_items.append((
+                CREDIT_CARD_KEY,
+                ExtensionSmallResultItem(
+                    icon='images/logo.png',
+                    name=f"{CREDIT_CARD_KEY}: {extension.credit_card[0]}",
+                    on_enter=ExtensionCustomAction(
+                        {
+                            "action": "display_credit_card_fields",
+                            "credit_card_string": extension.credit_card[0],
+                            "fields": extension.credit_card[1],
+                            "generate_new_credit_card": False
+                        },
+                        keep_app_open=True
+                    )
                 ),
-            )))
+                extension.credit_card[0]
+            ))
 
             # Order by last_used from DB; unknown ones go to the end, then by name
             usage_order = {
@@ -133,6 +142,31 @@ class KeywordQueryEventListener(EventListener):
             items = [item for _, item in aux_items]
 
             return RenderResultListAction(items)
+
+        print(f"🌠 query: {query}")
+        match = re.match(r'lorem\s+(\d+)', query)
+        if match:
+            number = int(match.group(1))
+            if 1 <= number <= 1000:
+                lorem_text = generate_lorem(number)
+                aux_items = []
+                for key, item, value in extension.fake_items:
+                    if key == 'Lorem':
+                        new_item = ExtensionSmallResultItem(
+                            icon='images/logo.png',
+                            name=item['name'],
+                            on_enter=ExtensionCustomAction(
+                                {
+                                    "action": "update_last_used",
+                                    "key": key,
+                                    "value": lorem_text
+                                },
+                                keep_app_open=False
+                            ))
+
+                        aux_items.append((key, new_item, value))
+                    aux_items.append((key, item, value))
+                extension.fake_items = aux_items
 
         filtered_items = [
             item
