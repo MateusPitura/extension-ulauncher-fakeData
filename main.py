@@ -188,6 +188,9 @@ class KeywordQueryEventListener(EventListener):
             return RenderResultListAction([new_item])
 
         min_value, max_value, digit_count = parse_number(query)
+        print(f"🌠 digit_count: {digit_count}")
+        print(f"🌠 max_value: {max_value}")
+        print(f"🌠 min_value: {min_value}")
         if min_value is not None or max_value is not None or digit_count is not None:
             new_number = generate_random_number(
                 min_value=min_value, max_value=max_value, digit_count=digit_count)
