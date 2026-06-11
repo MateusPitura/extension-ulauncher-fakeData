@@ -62,7 +62,7 @@ class KeywordQueryEventListener(EventListener):
                 "Lorem": generate_lorem(10),
                 "Company": generate_company(),
                 "Color": generate_color(),
-                "Number": generate_random_number()
+                "Number": f'{generate_random_number()}'
             }
 
             custom_emails_raw = extension.preferences.get('custom_emails', '')
@@ -201,7 +201,7 @@ class KeywordQueryEventListener(EventListener):
                     {
                         "action": "update_last_used",
                         "key": 'Number',
-                        "value": new_number
+                        "value": f'{new_number}'
                     },
                     keep_app_open=False
                 ))
