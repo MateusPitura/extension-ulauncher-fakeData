@@ -46,13 +46,12 @@ CREDIT_CARD_KEY = 'Credit Card'
 
 def handle_keyword_query(event, extension):
     query = (event.get_argument() or "").lower().strip()
+    should_format_with_mask = extension.preferences.get(
+        'format_with_mask', '') == 'true'
+    date_format = extension.preferences.get('date_format', 'dd/mm/yyyy')
 
     if query == "":
         aux_items = []
-
-        should_format_with_mask = extension.preferences.get(
-            'format_with_mask', '') == 'true'
-        date_format = extension.preferences.get('date_format', 'dd/mm/yyyy')
 
         fake_data = {
             "Date": generate_date(date_format=date_format),
@@ -102,7 +101,7 @@ def handle_keyword_query(event, extension):
 
         if extension.credit_card is None:
             extension.credit_card = generate_credit_card(
-                formatted=should_format_with_mask)
+                formatted=should_format_with_mask, date_format=date_format)
 
         aux_items.append((
             ADDRESS_KEY,
@@ -243,6 +242,7 @@ class CustomActionListener(EventListener):
         data = event.get_data()
         should_format_with_mask = extension.preferences.get(
             'format_with_mask', '') == 'true'
+        date_format = extension.preferences.get('date_format', 'dd/mm/yyyy')
 
         if data.get("action") == "update_last_used":
             key = data["key"]
@@ -301,7 +301,8 @@ class CustomActionListener(EventListener):
 
             if generate_new:
                 extension.credit_card = generate_credit_card(
-                    formatted=should_format_with_mask
+                    formatted=should_format_with_mask,
+                    date_format=date_format
                 )
                 credit_card_string = extension.credit_card[0]
                 fields = extension.credit_card[1]
