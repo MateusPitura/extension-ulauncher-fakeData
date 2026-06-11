@@ -3,7 +3,7 @@ from src.fakeData.address import address
 
 
 def generate_address(formatted=True):
-    address_aux = random.choice(address)
+    address_aux = random.choice(address).copy()
 
     if not formatted:
         address_aux['CEP'] = address_aux['CEP'].replace('-', '')

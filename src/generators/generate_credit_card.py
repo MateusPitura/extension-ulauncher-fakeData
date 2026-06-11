@@ -3,7 +3,7 @@ from src.fakeData.credit_card import credit_card
 
 
 def generate_credit_card(formatted=True, date_format="dd/mm/yyyy"):
-    credit_card_aux = random.choice(credit_card)
+    credit_card_aux = random.choice(credit_card).copy()
 
     if not formatted:
         credit_card_aux["Number"] = credit_card_aux["Number"].replace(" ", "")
