@@ -143,18 +143,10 @@ class CustomActionListener(EventListener):
 
             subprocess.run(["xclip", "-selection", "clipboard"],
                            input=address_string.encode(), check=False)
+            
+            extension.repository.mark_as_used('address')
 
             items = [
-                ExtensionSmallResultItem(
-                    icon='images/logo.png',
-                    name=f"{key}: {value}",
-                    on_enter=CopyToClipboardAction(value),
-                )
-                for key, value in fields.items()
-            ]
-
-            items.insert(
-                0,
                 ExtensionSmallResultItem(
                     icon='images/reset.png',
                     name="Generate new address",
@@ -166,7 +158,16 @@ class CustomActionListener(EventListener):
                         keep_app_open=True
                     ),
                 )
-            )
+            ]
+
+            items += [
+                ExtensionSmallResultItem(
+                    icon='images/logo.png',
+                    name=f"{key}: {value}",
+                    on_enter=CopyToClipboardAction(value),
+                )
+                for key, value in fields.items()
+            ]
 
             return RenderResultListAction(items)
 
