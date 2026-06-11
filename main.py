@@ -9,6 +9,7 @@ from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAct
 from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 from ulauncher.api.shared.event import ItemEnterEvent
 from src.generators.generate_address import generate_address
+from src.generators.generate_credit_card import generate_credit_card
 from src.generators.generate_birth_date import generate_birth_date
 from src.generators.generate_cnpj import generate_cnpj
 from src.generators.generate_cpf import generate_cpf
@@ -29,8 +30,12 @@ class FakaDataExtension(Extension):
         self.repository = GeneratorRepository(
             dirname=os.path.dirname(__file__))
         self.address = None
+        self.credit_card = None
+
 
 ADDRESS_KEY = 'Address'
+CREDIT_CARD_KEY = 'Credit Card'
+
 
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
@@ -79,6 +84,9 @@ class KeywordQueryEventListener(EventListener):
             if extension.address is None:
                 extension.address = generate_address()
 
+            if extension.credit_card is None:
+                extension.credit_card = generate_credit_card()
+
             aux_items.append((ADDRESS_KEY, ExtensionSmallResultItem(
                 icon='images/logo.png',
                 name=f"{ADDRESS_KEY}: {extension.address[0]}",
@@ -88,6 +96,20 @@ class KeywordQueryEventListener(EventListener):
                         "address_string": extension.address[0],
                         "fields": extension.address[1],
                         "generate_new_address": False
+                    },
+                    keep_app_open=True
+                ),
+            )))
+
+            aux_items.append((CREDIT_CARD_KEY, ExtensionSmallResultItem(
+                icon='images/logo.png',
+                name=f"{CREDIT_CARD_KEY}: {extension.credit_card[0]}",
+                on_enter=ExtensionCustomAction(
+                    {
+                        "action": "display_credit_card_fields",
+                        "credit_card_string": extension.credit_card[0],
+                        "fields": extension.credit_card[1],
+                        "generate_new_credit_card": False
                     },
                     keep_app_open=True
                 ),
@@ -132,9 +154,9 @@ class CustomActionListener(EventListener):
                            input=value.encode(), check=False)
 
         if data.get("action") == "display_address_fields":
-            generate_new_addres = data["generate_new_address"]
+            generate_new = data["generate_new_address"]
 
-            if generate_new_addres:
+            if generate_new:
                 extension.address = generate_address()
                 address_string = extension.address[0]
                 fields = extension.address[1]
@@ -144,7 +166,7 @@ class CustomActionListener(EventListener):
 
             subprocess.run(["xclip", "-selection", "clipboard"],
                            input=address_string.encode(), check=False)
-            
+
             extension.repository.mark_as_used(ADDRESS_KEY)
 
             items = [
@@ -155,6 +177,47 @@ class CustomActionListener(EventListener):
                         {
                             "action": "display_address_fields",
                             "generate_new_address": True
+                        },
+                        keep_app_open=True
+                    ),
+                )
+            ]
+
+            items += [
+                ExtensionSmallResultItem(
+                    icon='images/logo.png',
+                    name=f"{key}: {value}",
+                    on_enter=CopyToClipboardAction(value),
+                )
+                for key, value in fields.items()
+            ]
+
+            return RenderResultListAction(items)
+
+        if data.get("action") == "display_credit_card_fields":
+            generate_new = data["generate_new_credit_card"]
+
+            if generate_new:
+                extension.credit_card = generate_credit_card()
+                credit_card_string = extension.credit_card[0]
+                fields = extension.credit_card[1]
+            else:
+                credit_card_string = data["credit_card_string"]
+                fields = data["fields"]
+
+            subprocess.run(["xclip", "-selection", "clipboard"],
+                           input=credit_card_string.encode(), check=False)
+
+            extension.repository.mark_as_used(CREDIT_CARD_KEY)
+
+            items = [
+                ExtensionSmallResultItem(
+                    icon='images/reset.png',
+                    name="Generate new credit card",
+                    on_enter=ExtensionCustomAction(
+                        {
+                            "action": "display_credit_card_fields",
+                            "generate_new_credit_card": True
                         },
                         keep_app_open=True
                     ),
