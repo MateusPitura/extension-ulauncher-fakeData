@@ -143,30 +143,24 @@ class KeywordQueryEventListener(EventListener):
 
             return RenderResultListAction(items)
 
-        print(f"🌠 query: {query}")
         match = re.match(r'lorem\s+(\d+)', query)
         if match:
             number = int(match.group(1))
             if 1 <= number <= 1000:
                 lorem_text = generate_lorem(number)
-                aux_items = []
-                for key, item, value in extension.fake_items:
-                    if key == 'Lorem':
-                        new_item = ExtensionSmallResultItem(
-                            icon='images/logo.png',
-                            name=f'Lorem: {lorem_text}',
-                            on_enter=ExtensionCustomAction(
-                                {
-                                    "action": "update_last_used",
-                                    "key": key,
-                                    "value": lorem_text
-                                },
-                                keep_app_open=False
-                            ))
+                new_item = ExtensionSmallResultItem(
+                    icon='images/logo.png',
+                    name=f'Lorem: {lorem_text}',
+                    on_enter=ExtensionCustomAction(
+                        {
+                            "action": "update_last_used",
+                            "key": 'Lorem',
+                            "value": lorem_text
+                        },
+                        keep_app_open=False
+                    ))
 
-                        aux_items.append((key, new_item, value))
-                    aux_items.append((key, item, value))
-                extension.fake_items = aux_items
+                return RenderResultListAction([new_item])
 
         filtered_items = [
             item
