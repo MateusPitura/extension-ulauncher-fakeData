@@ -139,7 +139,7 @@ class KeywordQueryEventListener(EventListener):
             extension.fake_items = aux_items
 
             # Drop names, keep only items
-            items = [item for _, item in aux_items]
+            items = [item for _, item, _ in aux_items]
 
             return RenderResultListAction(items)
 
