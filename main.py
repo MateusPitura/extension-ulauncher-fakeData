@@ -16,10 +16,11 @@ from src.generators.generate_cnpj import generate_cnpj
 from src.generators.generate_cpf import generate_cpf
 from src.generators.generate_email import generate_email
 from src.generators.generate_name import generate_name
-from src.generators.generate_phone import generate_phone
 from src.generators.generate_rg import generate_rg
 from src.generators.generate_lorem import generate_lorem
 from src.utils.generate_random_number import generate_random_number
+from src.generators.generate_home_phone import generate_home_phone
+from src.generators.generate_mobile_phone import generate_mobile_phone
 from src.repository.GeneratorRepository import GeneratorRepository
 
 
@@ -52,7 +53,8 @@ class KeywordQueryEventListener(EventListener):
                 "CPF": generate_cpf(),
                 "Email": generate_email(),
                 "Name": generate_name(),
-                "Phone": generate_phone(),
+                "CellPhone": generate_mobile_phone(),
+                "Phone": generate_home_phone(),
                 "RG": generate_rg(),
                 "Lorem": generate_lorem(10)
             }
