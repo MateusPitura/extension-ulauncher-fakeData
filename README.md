@@ -1,13 +1,52 @@
-# Brazilian Data Generator
+<h1 align="center"> 
+  <p>Fake Data</p>
+  <img src="https://github.com/user-attachments/assets/120576c9-7d8e-48e9-a20a-3f6a43c2ff15" width="50%">
+</h1> 
 
-A Ulauncher extension that generates a wide range of valid Brazilian data on the fly. With this tool, you can quickly generate CPF, CNPJ, RG, names, addresses (with consistent city/state data), postal codes, phone numbers, birth dates, email addresses, and even a complete data set—all with a single command.
+<p> 
+  <img src="https://img.shields.io/badge/Release-Jun%202026-green">  
+  <img src="https://img.shields.io/github/stars/MateusPitura/extension-ulauncher-fakeData?style=social"> 
+</p> 
 
-![Demo](demo.gif)
+## Description
 
-## Features
+This ULauncher extension allows users to generate fake data directly from ULauncher. It generates addresses, credit cards, numbers with delimiters, custom-sized lorem text, allows you to define custom emails, change the date format, enable or disable the mask, and generate dates in the past or future
 
-- **CPF & CNPJ Generation:** Creates valid CPF and CNPJ numbers using check-digit algorithms.
-- **Additional Data:** Generates RG, full names (using an extensive list of first and last names), realistic addresses (matching cities with their states), postal codes, phone numbers, birth dates, and emails.
-- **Consistent Addresses:** Uses a dictionary of municipalities to ensure that if a state is chosen, a municipality from that state is generated.
-- **Custom Icons:** Displays a custom icon for each generated data type if available, with fallback defaults.
-- **Easy to Use:** Trigger the extension with your chosen keyword and select the data type to copy it to your clipboard.
+- [Features](#features)
+- [How to Run](#how-to-run)
+- [Technologies Used](#technologies-used)
+- [Authors](#authors)
+
+## Features 
+
+📏 **Numbers with delimiters:** generate numbers with delimiters such as `number > 10` and `number < 10` or with a specific number of digits such as `number 10`
+
+📝 **Custom-sized lorem text:** generate custom-sized lorem text using `lorem 10`
+
+📅 **Generate dates in the past or future:** generates dates in the past with `date p` or in the future with `date f`
+
+## How to Run
+
+1. In Ulauncher app settings add an extension with the link https://github.com/MateusPitura/extension-ulauncher-fakeData
+
+### For devs
+
+Generate fake data with:
+- `python3 get_address_payload.py`
+- `python3 get_credit_card_payload.py`
+
+## Technologies Used
+
+<!--Link for badges: https://github.com/Ileriayo/markdown-badges -->
+
+<p align="left">
+    <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python"/>
+    <img src="https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white" alt="SqLite"/>
+</p>  
+
+## Authors 
+
+| Mateus Pitura | 
+|------|
+| <p align="center"><img src="https://avatars.githubusercontent.com/u/119008106" width="100" height="100"></p> |  
+| <a href="https://url.mateuspitura.com?q=linkedin.com/in/mateuspitura/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"> |
