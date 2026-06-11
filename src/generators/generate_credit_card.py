@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 from src.fakeData.credit_card import credit_card
 
 
@@ -9,9 +10,10 @@ def generate_credit_card(formatted=True, date_format="dd/mm/yyyy"):
         credit_card_aux["Number"] = credit_card_aux["Number"].replace(" ", "")
 
     if date_format == "YYYY-MM-DD":
-        credit_card_aux["Expiration Date"] = credit_card_aux["Expiration Date"].strftime(
-            "%Y-%m-%d"
-        )
+        credit_card_aux["Expiration Date"] = datetime.strptime(
+            credit_card_aux["Expiration Date"],
+            "%d/%m/%Y"
+        ).strftime("%Y-%m-%d")
 
     full_credit_card = credit_card_aux
 
