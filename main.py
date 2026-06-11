@@ -152,9 +152,10 @@ class KeywordQueryEventListener(EventListener):
                 aux_items = []
                 for key, item, value in extension.fake_items:
                     if key == 'Lorem':
+                        print(f"🌠 item: {item}")
                         new_item = ExtensionSmallResultItem(
                             icon='images/logo.png',
-                            name=item['name'],
+                            name=item.get('name'),
                             on_enter=ExtensionCustomAction(
                                 {
                                     "action": "update_last_used",
