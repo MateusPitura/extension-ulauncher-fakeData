@@ -216,7 +216,7 @@ def handle_keyword_query(event, extension):
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         try:
-            handle_keyword_query(
+            return handle_keyword_query(
                 event, extension
             )
 
