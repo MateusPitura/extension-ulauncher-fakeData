@@ -30,6 +30,7 @@ class FakaDataExtension(Extension):
             dirname=os.path.dirname(__file__))
         self.address = None
 
+ADDRESS_KEY = 'Address'
 
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
@@ -78,9 +79,9 @@ class KeywordQueryEventListener(EventListener):
             if extension.address is None:
                 extension.address = generate_address()
 
-            aux_items.append(("Address", ExtensionSmallResultItem(
+            aux_items.append((ADDRESS_KEY, ExtensionSmallResultItem(
                 icon='images/logo.png',
-                name=f"Address: {extension.address[0]}",
+                name=f"{ADDRESS_KEY}: {extension.address[0]}",
                 on_enter=ExtensionCustomAction(
                     {
                         "action": "display_address_fields",
@@ -144,7 +145,7 @@ class CustomActionListener(EventListener):
             subprocess.run(["xclip", "-selection", "clipboard"],
                            input=address_string.encode(), check=False)
             
-            extension.repository.mark_as_used('address')
+            extension.repository.mark_as_used(ADDRESS_KEY)
 
             items = [
                 ExtensionSmallResultItem(
