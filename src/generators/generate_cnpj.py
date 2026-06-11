@@ -1,9 +1,9 @@
 from src.utils.calculate_digit import calculate_digit
-from src.utils.generate_random_number import generate_random_number
+from src.generators.generate_random_number import generate_random_number
 
 
 def generate_cnpj(formatted=True) -> str:
-    root = generate_random_number(8)
+    root = generate_random_number(digit_count=8)
     suffix = "0001"
     numbers = root + suffix
     first_weights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]

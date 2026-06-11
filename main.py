@@ -18,7 +18,7 @@ from src.generators.generate_email import generate_email
 from src.generators.generate_name import generate_name
 from src.generators.generate_rg import generate_rg
 from src.generators.generate_lorem import generate_lorem
-from src.utils.generate_random_number import generate_random_number
+from src.generators.generate_random_number import generate_random_number
 from src.generators.generate_home_phone import generate_home_phone
 from src.generators.generate_mobile_phone import generate_mobile_phone
 from src.generators.generate_company import generate_company
@@ -72,7 +72,7 @@ class KeywordQueryEventListener(EventListener):
                 name, email = map(str.strip, custom_email.split('=', 1))
 
                 fake_data[f'Email {name}'] = email.replace(
-                    '{random}', generate_random_number(5))
+                    '{random}', generate_random_number(digit_count=5))
 
             for key, value in fake_data.items():
                 item = ExtensionSmallResultItem(
@@ -168,7 +168,7 @@ class KeywordQueryEventListener(EventListener):
 
                 return RenderResultListAction([new_item])
 
-        if query == "date past" or query == "date future":
+        if query in ("date past", "date future"):
             new_date = generate_date(
                 only_past=True) if query == "date past" else generate_date(only_future=True)
             new_item = ExtensionSmallResultItem(

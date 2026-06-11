@@ -1,9 +1,9 @@
-from src.utils.generate_random_number import generate_random_number
+from src.generators.generate_random_number import generate_random_number
 from src.utils.calculate_digit import calculate_digit
 
 
 def generate_cpf(formatted=True) -> str:
-    nine_digits = generate_random_number(9)
+    nine_digits = generate_random_number(digit_count=9)
     first_weights = list(range(10, 1, -1))
     first_digit = calculate_digit(nine_digits, first_weights)
     second_weights = list(range(11, 1, -1))

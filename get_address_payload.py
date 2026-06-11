@@ -1,6 +1,6 @@
 import requests
 import json
-from src.utils.generate_random_number import generate_random_number
+from src.generators.generate_random_number import generate_random_number
 
 CEPS = [
     "01311-000",
@@ -32,7 +32,7 @@ for cep in CEPS:
     address = {
         "CEP": data.get("cep", ""),
         "Street": data.get("logradouro", ""),
-        "Number": generate_random_number(4),
+        "Number": generate_random_number(digit_count=4),
         "Complement": data.get("complemento", ""),
         "Neighborhood": data.get("bairro", ""),
         "City": data.get("localidade", ""),
