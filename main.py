@@ -21,6 +21,7 @@ from src.generators.generate_lorem import generate_lorem
 from src.utils.generate_random_number import generate_random_number
 from src.generators.generate_home_phone import generate_home_phone
 from src.generators.generate_mobile_phone import generate_mobile_phone
+from src.generators.generate_company import generate_company
 from src.repository.GeneratorRepository import GeneratorRepository
 
 
@@ -56,7 +57,8 @@ class KeywordQueryEventListener(EventListener):
                 "CellPhone": generate_mobile_phone(),
                 "Phone": generate_home_phone(),
                 "RG": generate_rg(),
-                "Lorem": generate_lorem(10)
+                "Lorem": generate_lorem(10),
+                "Company": generate_company()
             }
 
             custom_emails_raw = extension.preferences.get('custom_emails', '')
