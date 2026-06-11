@@ -22,6 +22,7 @@ from src.utils.generate_random_number import generate_random_number
 from src.generators.generate_home_phone import generate_home_phone
 from src.generators.generate_mobile_phone import generate_mobile_phone
 from src.generators.generate_company import generate_company
+from src.generators.generate_color import generate_color
 from src.repository.GeneratorRepository import GeneratorRepository
 
 
@@ -58,7 +59,8 @@ class KeywordQueryEventListener(EventListener):
                 "Phone": generate_home_phone(),
                 "RG": generate_rg(),
                 "Lorem": generate_lorem(10),
-                "Company": generate_company()
+                "Company": generate_company(),
+                "Color": generate_color(),
             }
 
             custom_emails_raw = extension.preferences.get('custom_emails', '')
