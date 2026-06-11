@@ -171,7 +171,7 @@ class KeywordQueryEventListener(EventListener):
 
         filtered_items = [
             item
-            for key, item in extension.fake_items
+            for key, item, _ in extension.fake_items
             if query in key.lower()
         ]
         return RenderResultListAction(filtered_items)
