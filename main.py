@@ -23,6 +23,7 @@ from src.generators.generate_home_phone import generate_home_phone
 from src.generators.generate_mobile_phone import generate_mobile_phone
 from src.generators.generate_company import generate_company
 from src.generators.generate_color import generate_color
+from src.utils.get_number_modifiers import parse_number
 from src.repository.GeneratorRepository import GeneratorRepository
 
 
@@ -61,6 +62,7 @@ class KeywordQueryEventListener(EventListener):
                 "Lorem": generate_lorem(10),
                 "Company": generate_company(),
                 "Color": generate_color(),
+                "Number": generate_random_number()
             }
 
             custom_emails_raw = extension.preferences.get('custom_emails', '')
@@ -179,6 +181,24 @@ class KeywordQueryEventListener(EventListener):
                         "action": "update_last_used",
                         "key": 'Date',
                         "value": new_date
+                    },
+                    keep_app_open=False
+                ))
+
+            return RenderResultListAction([new_item])
+
+        min_value, max_value, digit_count = parse_number(query)
+        if min_value is not None or max_value is not None or digit_count is not None:
+            new_number = generate_random_number(
+                min_value=min_value, max_value=max_value, digit_count=digit_count)
+            new_item = ExtensionSmallResultItem(
+                icon='images/logo.png',
+                name=f'Number: {new_number}',
+                on_enter=ExtensionCustomAction(
+                    {
+                        "action": "update_last_used",
+                        "key": 'Number',
+                        "value": new_number
                     },
                     keep_app_open=False
                 ))
