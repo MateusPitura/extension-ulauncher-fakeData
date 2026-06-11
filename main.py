@@ -168,9 +168,9 @@ class KeywordQueryEventListener(EventListener):
 
                 return RenderResultListAction([new_item])
 
-        if query in ("date past", "date future"):
+        if query in ("date p", "date f"):
             new_date = generate_date(
-                only_past=True) if query == "date past" else generate_date(only_future=True)
+                only_past=True) if query == "date p" else generate_date(only_future=True)
             new_item = ExtensionSmallResultItem(
                 icon='images/logo.png',
                 name=f'Date: {new_date}',
