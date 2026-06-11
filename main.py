@@ -11,8 +11,8 @@ from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAct
 from ulauncher.api.shared.event import ItemEnterEvent
 from src.generators.generate_address import generate_address
 from src.generators.generate_credit_card import generate_credit_card
-from src.generators.generate_birth_date import generate_birth_date
 from src.generators.generate_cnpj import generate_cnpj
+from src.generators.generate_date import generate_date
 from src.generators.generate_cpf import generate_cpf
 from src.generators.generate_email import generate_email
 from src.generators.generate_name import generate_name
@@ -50,7 +50,7 @@ class KeywordQueryEventListener(EventListener):
             aux_items = []
 
             fake_data = {
-                "BirthDate": generate_birth_date(),
+                "Date": generate_date(),
                 "CNPJ": generate_cnpj(),
                 "CPF": generate_cpf(),
                 "Email": generate_email(),
@@ -153,20 +153,37 @@ class KeywordQueryEventListener(EventListener):
         if match:
             number = int(match.group(1))
             if 1 <= number <= 1000:
-                lorem_text = generate_lorem(number)
+                new_text = generate_lorem(number)
                 new_item = ExtensionSmallResultItem(
                     icon='images/logo.png',
-                    name=f'Lorem: {lorem_text}',
+                    name=f'Lorem: {new_text}',
                     on_enter=ExtensionCustomAction(
                         {
                             "action": "update_last_used",
                             "key": 'Lorem',
-                            "value": lorem_text
+                            "value": new_text
                         },
                         keep_app_open=False
                     ))
 
                 return RenderResultListAction([new_item])
+
+        if query == "date past" or query == "date future":
+            new_date = generate_date(
+                only_past=True) if query == "date past" else generate_date(only_future=True)
+            new_item = ExtensionSmallResultItem(
+                icon='images/logo.png',
+                name=f'Date: {new_date}',
+                on_enter=ExtensionCustomAction(
+                    {
+                        "action": "update_last_used",
+                        "key": 'Date',
+                        "value": new_date
+                    },
+                    keep_app_open=False
+                ))
+
+            return RenderResultListAction([new_item])
 
         filtered_items = [
             item
