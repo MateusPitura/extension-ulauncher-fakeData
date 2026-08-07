@@ -1,6 +1,6 @@
 <h1 align="center"> 
   <p>Fake Data</p>
-  <img src="https://github.com/user-attachments/assets/120576c9-7d8e-48e9-a20a-3f6a43c2ff15" width="50%">
+  <img src="https://github.com/user-attachments/assets/9a85834b-42b5-4988-baae-cdc332fd99da" width="50%">
 </h1> 
 
 <p> 
