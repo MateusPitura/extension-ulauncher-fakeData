@@ -27,7 +27,7 @@ This ULauncher extension allows users to generate fake data directly from ULaunc
 
 ## How to Run
 
-1. In Ulauncher app settings add an extension with the link https://github.com/MateusPitura/extension-ulauncher-fakeData
+1. In Ulauncher app settings add an extension with the link [https://github.com/MateusPitura/extension-ulauncher-fakeData](https://url.mateuspitura.com?q=github.com/MateusPitura/extension-ulauncher-fakeData)
 
 ### For devs
 
